@@ -151,8 +151,27 @@ class Tree
     depth
   end
 
+  def balanced?(root = @root)
+    return true if root.nil?
+
+    left_height = root.left ? height(root.left.data) : 0
+    right_height = root.right ? height(root.right.data) : 0
+    if (left_height - right_height).abs > 1
+      return false
+    elsif root.left.nil? && root.right.nil?
+      return true
+    else
+      return balanced?(root.left) && balanced?(root.right)
+    end
+  end
+
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.pretty_print
-p tree.depth(23)
+p tree.balanced?
+tree.insert(100000)
+tree.insert(900000)
+tree.pretty_print
+
+p tree.balanced?
