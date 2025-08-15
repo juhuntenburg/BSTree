@@ -128,9 +128,22 @@ class Tree
     block ? block.call(current) : collect.push(current.data)
   end
 
+  def height(value)
+    node = find(value)
+    node ? height_rec(node) - 1 : nil
+  end
+
+  def height_rec(root, height = 1)
+    left_height = root.left ? height_rec(root.left, height) : 0
+    right_height = root.right ? height_rec(root.right, height) : 0
+    height += [left_height, right_height].max
+
+    return height
+
+  end
+
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.pretty_print
-p tree.postorder
-tree.postorder { |p| puts p.data }
+p tree.height(6)
