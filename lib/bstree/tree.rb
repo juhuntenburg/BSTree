@@ -94,9 +94,21 @@ class Tree
     collect unless block_given?
   end
 
+  def level_order_recursive(queue = [@root], collect = [])
+    return collect if queue.empty?
+
+    current = queue.shift
+    block_given? ? yield(current) : collect.push(current)
+    queue << current.left if current.left
+    queue << current.right if current.right
+    level_order_recursive(queue, collect)
+  end
+
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.pretty_print
+# tree.level_order { |p| puts p.data}
+# p tree.level_order
 tree.level_order { |p| puts p.data}
-p tree.level_order
+p tree.level_order_recursive
