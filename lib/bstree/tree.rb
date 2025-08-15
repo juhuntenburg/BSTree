@@ -94,21 +94,43 @@ class Tree
     collect unless block_given?
   end
 
-  def level_order_recursive(queue = [@root], collect = [])
+  def level_order_recursive(queue = [@root], collect = [], &block)
     return collect if queue.empty?
 
     current = queue.shift
-    block_given? ? yield(current) : collect.push(current)
+    block ? block.call(current) : collect.push(current)
     queue << current.left if current.left
     queue << current.right if current.right
-    level_order_recursive(queue, collect)
+    level_order_recursive(queue, collect, &block)
+  end
+
+  def preorder(current = @root, collect = [], &block)
+    return collect if current.nil?
+
+    block ? block.call(current) : collect.push(current.data)
+    preorder(current.left, collect, &block)
+    preorder(current.right, collect, &block)
+  end
+
+  def inorder(current = @root, collect = [], &block)
+    return collect if current.nil?
+
+    inorder(current.left, collect, &block)
+    block ? block.call(current) : collect.push(current.data)
+    inorder(current.right, collect, &block)
+  end
+
+  def postorder(current = @root, collect = [], &block)
+    return collect if current.nil?
+
+    postorder(current.left, collect, &block)
+    postorder(current.right, collect, &block)
+    block ? block.call(current) : collect.push(current.data)
   end
 
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.pretty_print
-# tree.level_order { |p| puts p.data}
-# p tree.level_order
-tree.level_order { |p| puts p.data}
-p tree.level_order_recursive
+p tree.postorder
+tree.postorder { |p| puts p.data }
