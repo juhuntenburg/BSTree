@@ -137,13 +137,22 @@ class Tree
     left_height = root.left ? height_rec(root.left, height) : 0
     right_height = root.right ? height_rec(root.right, height) : 0
     height += [left_height, right_height].max
+    height
+  end
 
-    return height
-
+  def depth(value)
+    current = root
+    depth = 0
+    until current.data == value
+      current = value < current.data ? current.left : current.right
+      depth += 1
+      return nil unless current
+    end
+    depth
   end
 
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.pretty_print
-p tree.height(6)
+p tree.depth(23)
