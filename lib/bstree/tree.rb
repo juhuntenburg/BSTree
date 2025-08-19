@@ -165,13 +165,8 @@ class Tree
     end
   end
 
+  def rebalance
+    arr = inorder
+    @root = build_tree(arr)
+  end
 end
-
-tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-tree.pretty_print
-p tree.balanced?
-tree.insert(100000)
-tree.insert(900000)
-tree.pretty_print
-
-p tree.balanced?
